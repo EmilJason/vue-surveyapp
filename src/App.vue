@@ -1,6 +1,7 @@
 <script>
 import Question from '@/components/Question.vue'
 
+
 const initialData = [
   {question: 'Q1: Deliver through others', ans: ''},
   {question: 'Q2: Understand others perspective', ans: ''},
@@ -14,7 +15,8 @@ export default{
       getName: '',
       endpoint: 'https://vue-survey-hcoj.vercel.app',
       choices: ['A. Not Effective', 'B. Neither Ineffective or effective','C. Effective'],
-      showSubmit: false
+      showSubmit: false,
+      
     }
   },
   methods:{
@@ -34,27 +36,27 @@ export default{
       })
       this.showSubmit = !getHasAnswer.includes(false)
     },
-     handleSubmit(){
-      this.question.map(async(item)=>{
+      handleSubmit(){
+      this.question.map((item)=>{
         if (this.getName === '') {
           alert("We need your name.")
         }else{
-          let addData = await fetch(this.endpoint+`/add/${this.getName}/${item.question}/${item.ans}/`)
-           let result = await addData.json()
-            console.log("Result Submitted:", result);
-          this.question = initialData
-          this.getName=''
+          let addData = fetch(this.endpoint+`/add/${this.getName}/${item.question}/${item.ans}`)
+          .then(result=> result.json()).then((data)=>{
+            console.log("Data Added:", data);
+            this.getName=''
+          })
+           
         }
         
       })
      
     },
-    async getFromDatabase(){
-      
-    let getdata = await fetch(this.endpoint+'/post')
-    let result = await getdata.json()
-    console.log(result);
-  }
+    getFromDatabase(){  
+      let getdata = fetch(this.endpoint+'/post')
+      .then(result=>result.json())
+      .then((data)=>this.DataList=data)    
+    }
   },
   components:{
     Question
@@ -80,5 +82,6 @@ export default{
 
     <!-- Answer table -->
     <p v-for="(item, index) in question" :key="index">{{ item.question }} | {{ item.ans }}</p>
+
   </div>
 </template>
