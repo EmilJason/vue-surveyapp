@@ -8,14 +8,13 @@ body{
   background-color: #cecece;
 }
 .card{
-  position: absolute;
+  position: relative;
+  width: 45vw;
   padding: 3rem;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 3px 10px gray;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
+  margin: 5rem auto;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -24,6 +23,15 @@ body{
   margin-bottom: .5rem;
   text-transform: uppercase;
   font-size: 1rem;
+}
+.card h2{
+  margin-bottom: .5rem;
+  padding-bottom: 1rem;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #2e585e;
+  border-bottom: 1px solid gray;
 }
 .card .quest button{
   font-size: .8rem;
@@ -61,7 +69,6 @@ body{
 }
 .name-field{
   display: flex;
-  margin: auto;
   align-items: center;
   gap: .5rem;
 }
@@ -77,4 +84,13 @@ body{
 }
 .name-field input::placeholder{
   color: gray;
+}
+table{
+  border: 1px solid #bebebe;
+}
+table tr{
+  border-bottom: 1px solid #bebebe;
+}
+table tr:nth-child(even){
+  background-color: #cdd1d8;
 }

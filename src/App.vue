@@ -16,7 +16,8 @@ export default{
       endpoint: 'https://vue-survey-hcoj.vercel.app',
       choices: ['A. Not Effective', 'B. Neither Ineffective or effective','C. Effective'],
       showSubmit: false,
-      
+      list: [],
+      showList: false
     }
   },
   methods:{
@@ -25,7 +26,6 @@ export default{
       let getQuestion = this.question.findIndex(obj=>obj.question == quest)
       this.question[getQuestion].ans = ans
       console.log(this.question);
-      this.getFromDatabase()
       this.renderSubmit()
       
     },
@@ -37,39 +37,41 @@ export default{
       this.showSubmit = !getHasAnswer.includes(false)
     },
       handleSubmit(){
-      this.question.map((item)=>{
+      this.question.map(async (item)=>{
         if (this.getName === '') {
           alert("We need your name.")
         }else{
-          let addData = fetch(this.endpoint+`/add/${this.getName}/${item.question}/${item.ans}`)
-          .then(result=> result.json()).then((data)=>{
-            console.log("Data Added:", data);
-            this.getName=''
-          })
+           let addData = await fetch(this.endpoint+`/add/${this.getName}/${item.question}/${item.ans}`)
+           console.log(addData);
            
         }
         
       })
-     
+          this.getName=''
+          this.question = initialData
+          this.getFromDatabase()
     },
     getFromDatabase(){  
       let getdata = fetch(this.endpoint+'/post')
       .then(result=>result.json())
-      .then((data)=>this.DataList=data)    
+      .then((data)=>this.list = data)    
     }
   },
   components:{
     Question
   },
-  
+  mounted(){
+    this.getFromDatabase()
+  }
 }
 </script>
 
 
 <template>
   <div class="card">
+    <h2>Survey</h2>
     <div class="name-field">
-      <label for="person">Name</label>
+      <label for="person">Name:</label>
       <input id="person" name="person" type="text" v-model="getName" placeholder="Enter your name"/>
     </div>
     <Question 
@@ -82,6 +84,19 @@ export default{
 
     <!-- Answer table -->
     <p v-for="(item, index) in question" :key="index">{{ item.question }} | {{ item.ans }}</p>
-
+   
+      <table >
+        <tr>
+          <th>Name</th>
+          <th>Question</th>
+          <th>Answer</th>
+        </tr>
+        <tr v-for="item in list">
+          <td>{{ item.name }}</td>
+          <td>{{ item.question }}</td>
+          <td>{{ item.answer }}</td>
+        </tr>
+      </table>
+  
   </div>
 </template>
