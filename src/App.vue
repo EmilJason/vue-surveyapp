@@ -41,7 +41,7 @@ export default{
         if (this.getName === '') {
           alert("We need your name.")
         }else{
-           let addData = await fetch(this.endpoint+`/add/${this.getName}/${item.question}/${item.ans}`)
+           let addData = await fetch(this.endpoint+`/add/`)
            console.log(addData);
            
         }
