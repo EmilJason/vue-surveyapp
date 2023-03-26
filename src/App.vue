@@ -13,7 +13,7 @@ export default{
     return{
       question: initialData,
       getName: '',
-      endpoint: 'https://vue-survey-hcoj.vercel.app',
+      endpoint: 'https://vue-survey-xgr8.vercel.app',
       choices: ['A. Not Effective', 'B. Neither Ineffective or effective','C. Effective'],
       showSubmit: false,
       list: [],
@@ -41,7 +41,17 @@ export default{
         if (this.getName === '') {
           alert("We need your name.")
         }else{
-           let addData = await fetch(this.endpoint+`/add/`)
+           let addData = await fetch(this.endpoint+'/add',{
+            method: "POST",
+            headers:{
+              "Content-type": "application/json"
+            },
+            body:JSON.stringify({
+              name: this.getName,
+              question: item.question,
+              answer: item.ans
+            })
+           })
            console.log(addData);
            
         }
@@ -51,10 +61,10 @@ export default{
           this.question = initialData
           this.getFromDatabase()
     },
-    getFromDatabase(){  
-      let getdata = fetch(this.endpoint+'/post')
-      .then(result=>result.json())
-      .then((data)=>this.list = data)    
+    async getFromDatabase(){  
+      let getdata = await fetch(this.endpoint+"/post")
+      let result = await getdata.json()
+      this.list = result
     }
   },
   components:{
