@@ -3,9 +3,9 @@ import Question from '@/components/Question.vue'
 
 
 const initialData = [
-  {question: 'Q1: Deliver through others', ans: ''},
-  {question: 'Q2: Understand others perspective', ans: ''},
-  {question: 'Q3: Solve complex problems', ans: ''},
+  {question: 'Q1. Deliver through others', ans: ''},
+  {question: 'Q2. Understand others perspective', ans: ''},
+  {question: 'Q3. Solve complex problems', ans: ''},
 ]
 
 export default{
@@ -36,8 +36,9 @@ export default{
       })
       this.showSubmit = !getHasAnswer.includes(false)
     },
-      handleSubmit(){
-      this.question.map(async (item)=>{
+      async handleSubmit(){   
+        
+        console.log("to json", JSON.stringify(this.question));
         if (this.getName === '') {
           alert("We need your name.")
         }else{
@@ -48,17 +49,14 @@ export default{
             },
             body:JSON.stringify({
               name: this.getName,
-              question: item.question,
-              answer: item.ans
+              data: JSON.stringify({...this.question})
             })
            })
-           console.log(addData);
-           
-        }
-        
-      })
+           console.log(addData);  
+          }
           this.getName=''
           this.question = initialData
+          this.showSubmit = false
           this.getFromDatabase()
     },
     async getFromDatabase(){  
@@ -98,13 +96,11 @@ export default{
       <table >
         <tr>
           <th>Name</th>
-          <th>Question</th>
-          <th>Answer</th>
+          <th>Answers</th>
         </tr>
         <tr v-for="item in list">
           <td>{{ item.name }}</td>
-          <td>{{ item.question }}</td>
-          <td>{{ item.answer }}</td>
+          <td>{{ item.data }}</td>
         </tr>
       </table>
   
